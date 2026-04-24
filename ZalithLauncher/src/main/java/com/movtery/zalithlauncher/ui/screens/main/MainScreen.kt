@@ -328,18 +328,26 @@ private fun <E: TitledNavKey> TopBar(
                 val maxLines = 1
 
                 if (parent == null) {
-                    if (festivals.isEmpty()) {
+                    Column {
+                        if (festivals.isEmpty()) {
+                            Text(
+                                text = InfoDistributor.LAUNCHER_IDENTIFIER,
+                                style = style,
+                                softWrap = softWarp,
+                                maxLines = maxLines
+                            )
+                        } else {
+                            FestivalTitleText(
+                                festivals = festivals,
+                                style = style,
+                                maxLines = maxLines
+                            )
+                        }
                         Text(
-                            text = InfoDistributor.LAUNCHER_IDENTIFIER,
-                            style = style,
-                            softWrap = softWarp,
-                            maxLines = maxLines
-                        )
-                    } else {
-                        FestivalTitleText(
-                            festivals = festivals,
-                            style = style,
-                            maxLines = maxLines
+                            text = stringResource(R.string.unofficial_modified_version),
+                            style = MaterialTheme.typography.labelSmall,
+                            softWrap = false,
+                            maxLines = 1
                         )
                     }
                 } else {
