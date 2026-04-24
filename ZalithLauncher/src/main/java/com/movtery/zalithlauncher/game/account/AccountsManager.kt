@@ -26,7 +26,6 @@ import com.movtery.zalithlauncher.database.AppDatabase
 import com.movtery.zalithlauncher.game.account.auth_server.data.AuthServer
 import com.movtery.zalithlauncher.game.account.auth_server.data.AuthServerDao
 import com.movtery.zalithlauncher.setting.AllSettings
-import com.movtery.zalithlauncher.utils.isInGreaterChina
 import com.movtery.zalithlauncher.utils.logging.Logger.lError
 import com.movtery.zalithlauncher.utils.logging.Logger.lInfo
 import com.movtery.zalithlauncher.utils.network.isNetworkAvailable
@@ -202,10 +201,13 @@ object AccountsManager {
 
     /**
      * 刷新当前账号，同时刷新非中国大陆地区的正版状态
+     *
+     * Personal mod: region-based offline account restriction removed.
+     * Offline accounts are usable in all regions regardless of Microsoft sign-in state.
      */
     private fun refreshCurrentAccountState() {
         val currentAccount = getCurrentAccount()
-        val isOffline = !isInGreaterChina() && !hasMicrosoftAccount()
+        val isOffline = false
         _currentAccountFlow.update {
             //若处于非正版状态，不允许使用账号
             if (isOffline) null else currentAccount
