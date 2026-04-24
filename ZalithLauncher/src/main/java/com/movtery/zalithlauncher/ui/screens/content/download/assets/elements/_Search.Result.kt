@@ -52,9 +52,9 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -140,14 +140,20 @@ fun ResultListLayout(
     onNavigatePage: (Int) -> Unit,
     swapToDownload: (Platform, projectId: String, iconUrl: String?) -> Unit = { _, _, _ -> }
 ) {
-    when (val state = searchState) {
+    when (searchState) {
         is SearchAssetsState.Searching -> {
-            Box(modifier.padding(all = 12.dp)) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            Box(
+                modifier.padding(all = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                LinearWavyProgressIndicator(
+                    modifier = Modifier.width(168.dp),
+                    wavelength = 32.dp
+                )
             }
         }
         is SearchAssetsState.Success -> {
-            val page = state.page
+            val page = searchState.page
 
             val listState = rememberLazyListState()
             val maxCollapsePx = with(LocalDensity.current) { controllerHeight.toPx() }
@@ -208,10 +214,10 @@ fun ResultListLayout(
         }
         is SearchAssetsState.Error -> {
             Box(modifier.padding(all = 12.dp)) {
-                val message = if (state.args != null) {
-                    stringResource(state.message, *state.args)
+                val message = if (searchState.args != null) {
+                    stringResource(searchState.message, *searchState.args)
                 } else {
-                    stringResource(state.message)
+                    stringResource(searchState.message)
                 }
 
                 ScalingLabel(

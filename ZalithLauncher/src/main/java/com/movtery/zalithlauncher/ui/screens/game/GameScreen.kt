@@ -33,9 +33,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -662,13 +662,6 @@ fun GameScreen(
                     }
                 )
             }
-
-            if (AllSettings.gamepadControl.state) {
-                //手柄事件捕获层
-                SimpleGamepadCapture(
-                    gamepadViewModel = gamepadViewModel
-                )
-            }
         }
 
         //陀螺仪控制
@@ -730,6 +723,13 @@ fun GameScreen(
                 )
             }
         )
+
+        if (AllSettings.gamepadControl.state) {
+            //手柄事件捕获层
+            SimpleGamepadCapture(
+                gamepadViewModel = gamepadViewModel
+            )
+        }
 
         if (viewModel.isEditingLayout) {
             viewModel.currentControlFile?.let {
@@ -875,7 +875,7 @@ private fun GameInfoBox(
                         .padding(start = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    CircularProgressIndicator(
+                    LoadingIndicator(
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
 

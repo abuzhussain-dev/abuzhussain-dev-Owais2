@@ -39,9 +39,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -303,9 +303,11 @@ private fun VersionManagerLayout(
     ) {
         if (isRefreshing) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                CircularProgressIndicator(modifier = Modifier
-                    .size(24.dp)
-                    .align(Alignment.Center))
+                LoadingIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.Center)
+                )
             }
         } else {
             VersionIconImage(
