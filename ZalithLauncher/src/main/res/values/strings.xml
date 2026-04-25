@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="unofficial_modified_version">Unofficial Modified Version</string>
-    <string name="mods_dedup_removed">Moved %1$d duplicate mod(s) to mods_backup/</string>
     <string name="generic_cancel">Cancel</string>
     <string name="generic_confirm">Confirm</string>
     <string name="generic_error">Error</string>

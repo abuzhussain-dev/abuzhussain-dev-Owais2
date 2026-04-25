@@ -119,7 +119,6 @@ import com.movtery.zalithlauncher.game.version.installed.Version
 import com.movtery.zalithlauncher.game.version.installed.VersionFolders
 import com.movtery.zalithlauncher.game.version.mod.AllModReader
 import com.movtery.zalithlauncher.game.version.mod.LocalMod
-import com.movtery.zalithlauncher.game.version.mod.ModDeduplicator
 import com.movtery.zalithlauncher.game.version.mod.RemoteMod
 import com.movtery.zalithlauncher.game.version.mod.isDisabled
 import com.movtery.zalithlauncher.game.version.mod.isEnabled
@@ -235,31 +234,7 @@ private class ModsManageViewModel(
             modsState = LoadingState.Loading
             selectedMods.clear() //清空所有已选择的模组
             try {
-                val readMods = modReader.readAllForRemote()
-                //Auto-deduplicate: when multiple jars share the same mod id
-                //(e.g. sodium-0.5.8 and sodium-0.5.9), keep the newest and
-                //move the rest into ../mods_backup/ to prevent crashes.
-                val removed = ModDeduplicator.deduplicate(
-                    modReader.modsDir,
-                    readMods.map { it.localMod }
-                )
-                allMods = if (removed.isEmpty()) {
-                    readMods
-                } else {
-                    val removedSet = removed.toSet()
-                    readMods.filter { it.localMod.file.name !in removedSet }
-                }
-                if (removed.isNotEmpty()) {
-                    context?.let { ctx ->
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                ctx,
-                                ctx.getString(R.string.mods_dedup_removed, removed.size),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
+                allMods = modReader.readAllForRemote()
                 filterMods(context)
             } catch (_: CancellationException) {
                 //已取消
