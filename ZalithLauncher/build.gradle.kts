@@ -54,10 +54,10 @@ android {
 
     signingConfigs {
         create("releaseBuild") {
-            storeFile = file("zalith_launcher_debug.jks")
-            storePassword = defaultStorePassword
-            keyAlias = "movtery_zalith_debug"
-            keyPassword = defaultKeyPassword
+            storeFile = file("zalith_launcher.jks")
+            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt")
+            keyAlias = "movtery_zalith"
+            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt")
         }
         create("debugBuild") {
             storeFile = file("zalith_launcher_debug.jks")
@@ -71,7 +71,7 @@ android {
         applicationId = zalithPackageName
         applicationIdSuffix = ".v2"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = launcherVersionCode
         versionName = launcherVersionName
         manifestPlaceholders["launcher_name"] = launcherAPPName
@@ -238,8 +238,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.material.icons.core)
-    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.navigation3.runtime)

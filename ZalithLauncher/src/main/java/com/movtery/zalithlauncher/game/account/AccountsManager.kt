@@ -25,7 +25,9 @@ import com.movtery.zalithlauncher.coroutine.TaskSystem
 import com.movtery.zalithlauncher.database.AppDatabase
 import com.movtery.zalithlauncher.game.account.auth_server.data.AuthServer
 import com.movtery.zalithlauncher.game.account.auth_server.data.AuthServerDao
+import com.movtery.zalithlauncher.path.PathManager
 import com.movtery.zalithlauncher.setting.AllSettings
+import com.movtery.zalithlauncher.utils.isInGreaterChina
 import com.movtery.zalithlauncher.utils.logging.Logger.lError
 import com.movtery.zalithlauncher.utils.logging.Logger.lInfo
 import com.movtery.zalithlauncher.utils.network.isNetworkAvailable
@@ -36,6 +38,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.apache.commons.io.FileUtils
+import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 
 object AccountsManager {
@@ -201,18 +204,20 @@ object AccountsManager {
 
     /**
      * 刷新当前账号，同时刷新非中国大陆地区的正版状态
-     *
-     * Personal mod: region-based offline account restriction removed.
-     * Offline accounts are usable in all regions regardless of Microsoft sign-in state.
      */
     private fun refreshCurrentAccountState() {
         val currentAccount = getCurrentAccount()
-        val isOffline = false
+        val isOffline = checkLimit()
         _currentAccountFlow.update {
             //若处于非正版状态，不允许使用账号
             if (isOffline) null else currentAccount
         }
         _isOffline.update { isOffline }
+    }
+
+    private fun checkLimit(): Boolean {
+        val circumventLimit = File(PathManager.DIR_FILES_EXTERNAL, "circumventLimit")
+        return !circumventLimit.exists() && !isInGreaterChina() && !hasMicrosoftAccount()
     }
 
     /**
